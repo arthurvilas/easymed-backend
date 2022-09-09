@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
@@ -7,7 +9,7 @@ module.exports = {
     connection: {
       database: 'easymed',
       user: 'easymeduser',
-      password: 'easymeduser',
+      password: process.env.MYSQL_PASSWORD,
     },
     migrations: {
       tableName: 'knex_migrations',
