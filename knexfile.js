@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -12,6 +13,13 @@ module.exports = {
       password: process.env.MYSQL_PASSWORD,
     },
     migrations: {
+      directory: path.resolve(
+        __dirname,
+        'src',
+        'database',
+        'knex',
+        'migrations'
+      ),
       tableName: 'knex_migrations',
     },
     useNullAsDefault: true,
