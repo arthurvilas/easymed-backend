@@ -1,5 +1,7 @@
 const knex = require('../database/knex');
 const { hash, compare } = require('bcryptjs');
+const jwt = require("jsonwebtoken");
+const attachJWTToRes = require("../utils/attachJWT");
 
 class PatientController {
 
@@ -18,6 +20,9 @@ class PatientController {
       email,
       password: hashedPassword
     });
+
+    const token = jwt.sign({ id: patient_id, role: 'patient' }, process.env.JWT_SECRET);
+    attachJWTToRes(res, token);
 
     res.status(201).json({
       id: patient_id,
