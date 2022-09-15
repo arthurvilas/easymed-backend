@@ -5,7 +5,7 @@ const patientController = new PatientController();
 
 const patientRouter = Router();
 
-patientRouter.post('/login');
+patientRouter.get('/allergies/:idPatient', patientController.getAllergies);
 patientRouter.post('/signin', patientController.create);
 
 module.exports = patientRouter;
