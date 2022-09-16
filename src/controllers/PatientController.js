@@ -6,13 +6,12 @@ const attachJWTToRes = require('../utils/attachJWT');
 class PatientController {
   async create(req, res) {
     const { name, cpf, phone, email, password } = req.body;
-    const [unavailableEmail] = await knex('patient').where('email', email);
+    const [unavailableEmail] = await knex('patients').where('email', email);
     if (unavailableEmail) {
-      res.status(400).json({ error: 'Email already in use' });
-      throw new Error('Email already in use');
+      return res.status(400).json({ error: 'Email already in use' });
     }
     const hashedPassword = await hash(password, 8);
-    const [patient_id] = await knex('patient').insert({
+    const [patient_id] = await knex('patients').insert({
       name,
       cpf,
       phone,
@@ -38,25 +37,29 @@ class PatientController {
   async getAllergies(req, res) {
     const { idPatient } = req.params;
 
-    const x = await knex
-      .select('allergies.description', 'patients_has_allergies.symptoms')
-      .from('patients_has_allergies')
-      .join('allergies', function(){
-        this
-          .on('allergies.id', '=', 'patients_has_allergies.idAllergy')
-          .and('patients_has_allergies.idPatient', '=', `${idPatient}`);
-      });
+    const patientAllergies = await knex('patients_has_allergies as pa')
+      .select('a.id', 'a.description', 'pa.symptoms')
+      .join('allergies as a', 'pa.idAllergy', 'a.id')
+      .where({ idPatient });
 
-    // const patientAllergies =
-    //   await knex('allergies').whereIn(
-    //   'id',
-    //   knex('patients_has_allergies')
-    //     .select('idAllergy')
-    //     .where('idPatient', idPatient)
-    // );
+    res.json(patientAllergies);
+  }
 
-    console.log(x);
-    res.json('oi mae');
+  async createAllergy(req, res) {
+    const { idPatient } = req.params;
+    const { id: idAllergy, symptoms } = req.body;
+    const [patient] = await knex('patients').where('id', idPatient);
+    const [allergy] = await knex('allergies').where('id', idAllergy);
+    if (patient.length === 0 || allergy.length === 0) {
+      return res.status(400).json({error: 'Provide existing Patient and Allergy id\'s'});
+    }
+
+    await knex('patients_has_allergies').insert({
+      idPatient,
+      idAllergy,
+      symptoms,
+    });
+    res.status(201).json({ allergy, symptoms });
   }
 }
 
