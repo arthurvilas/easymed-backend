@@ -108,6 +108,78 @@ class PatientController {
 
     res.json(patientDiseases);
   }
+
+  async createCondition(req, res) {
+    const { idPatient } = req.params;
+    const { id: idCondition, isActive, isInFamily, symptoms } = req.body;
+    const patient = await knex('patients').where('id', idPatient);
+    const condition = await knex('conditions').where('id', idCondition);
+    // TODO: Check for existing condition?
+    if (patient.length === 0 || condition.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "Provide existing Patient and Condition id's" });
+    }
+    await knex('patients_conditions').insert({
+      idPatient,
+      idCondition,
+      isActive,
+      isInFamily,
+      symptoms,
+    });
+
+    res.status(201).json({
+      condition,
+      isActive,
+      isInFamily,
+      symptoms,
+    });
+  }
+
+  async updateCondition(req, res) {
+    const { idPatient } = req.params;
+    const { id: idCondition, isActive, isInFamily, symptoms } = req.body;
+    const [existingCondition] = await knex('patients_conditions').where({
+      idPatient,
+      idCondition,
+    });
+    if (!existingCondition) {
+      return res.status(400).json({ error: 'Condition not registered' });
+    }
+    await knex('patients_conditions')
+      .where({
+        idPatient,
+        idCondition,
+      })
+      .update({
+        isActive,
+        isInFamily,
+        symptoms,
+      });
+
+    return res.json({ id: idCondition, isActive, isInFamily, symptoms });
+  }
+
+  async deleteCondition(req, res) {
+    const { idPatient } = req.params;
+    const { id: idCondition } = req.body;
+    const [existingCondition] = await knex('patients_conditions').where({
+      idPatient,
+      idCondition,
+    });
+    if (!existingCondition) {
+      return res.status(400).json({ error: 'Condition not registered' });
+    }
+    await knex('patients_conditions')
+      .where({
+        idPatient,
+        idCondition,
+      })
+      .del();
+    delete existingCondition.idPatient;
+
+    return res.json(existingCondition);
+  }
 }
 
 module.exports = PatientController;

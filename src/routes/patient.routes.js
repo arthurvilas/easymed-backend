@@ -8,6 +8,9 @@ const patientRouter = Router();
 patientRouter.post('/signup', patientController.create);
 
 patientRouter.get('/conditions/:idPatient', patientController.getConditions);
+patientRouter.post('/conditions/:idPatient', patientController.createCondition);
+patientRouter.put('/conditions/:idPatient', patientController.updateCondition);
+patientRouter.delete('/conditions/:idPatient', patientController.deleteCondition);
 
 patientRouter.get('/allergies/:idPatient', patientController.getAllergies);
 patientRouter.post('/allergies/:idPatient', patientController.createAllergy);
