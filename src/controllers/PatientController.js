@@ -34,6 +34,16 @@ class PatientController {
     });
   }
 
+  async getPatient(req, res) {
+    const { idPatient } = req.params;
+    const [patient] = await knex('patients').where('id', idPatient);
+    if (!patient) {
+      return res.status(400).json({ error: 'No patient with id ' + idPatient });
+    }
+
+    return res.json(patient);
+  }
+
   async getAllergies(req, res) {
     const { idPatient } = req.params;
     const patient = await knex('patients').where('id', idPatient);
