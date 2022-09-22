@@ -5,7 +5,13 @@ const patientController = new PatientController();
 
 const patientRouter = Router();
 
+patientRouter.get('/:idPatient', patientController.get);
 patientRouter.post('/signup', patientController.create);
+
+patientRouter.get('/medications/:idPatient', patientController.getMedications);
+patientRouter.post('/medications/:idPatient', patientController.createMedication);
+patientRouter.put('/medications/:idPatient', patientController.updateMedication);
+patientRouter.put('/medications/:idPatient', patientController.deleteMedication);
 
 patientRouter.get('/conditions/:idPatient', patientController.getConditions);
 patientRouter.post('/conditions/:idPatient', patientController.createCondition);

@@ -24,12 +24,12 @@ const login = async (req, res) => {
       if (passwordMatch) {
         const token = jwt.sign({ id: entity.id, role }, process.env.JWT_SECRET);
         attachJWTToRes(res, token);
-        return res.json(roles[role]);
+        return res.json(entity);
       }
     }
   }
 
-  res.status(400).json('Not found');
+  return res.status(400).json('Not found');
 };
 
 module.exports = login;
