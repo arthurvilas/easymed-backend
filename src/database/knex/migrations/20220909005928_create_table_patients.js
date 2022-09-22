@@ -11,8 +11,9 @@ exports.up = function (knex) {
     table.string('password', 255).notNullable();
     table.string('phone', 30);
     table.double('height');
-    table.double('weigth');
+    table.double('weight');
     table.enu('gender', ['male', 'female', 'other']);
+    table.string('pictureUrl', 500);
     table.date('birthDate');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());

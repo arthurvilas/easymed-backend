@@ -1,25 +1,31 @@
 const { Router } = require('express');
 const PatientController = require('../controllers/PatientController');
+const AllergiesController = require('../controllers/AllergiesController');
+const ConditionsController = require('../controllers/ConditionsController');
+const MedicationsController = require('../controllers/MedicationsController');
 
 const patientController = new PatientController();
+const allergiesController = new AllergiesController();
+const conditionsController = new ConditionsController();
+const medicationsController = new MedicationsController();
 
 const patientRouter = Router();
 
 patientRouter.get('/:idPatient', patientController.get);
 patientRouter.post('/signup', patientController.create);
 
-patientRouter.get('/medications/:idPatient', patientController.getMedications);
-patientRouter.post('/medications/:idPatient', patientController.createMedication);
-patientRouter.put('/medications/:idPatient', patientController.updateMedication);
-patientRouter.put('/medications/:idPatient', patientController.deleteMedication);
+patientRouter.get('/medications/:idPatient', medicationsController.getMedications);
+patientRouter.post('/medications/:idPatient', medicationsController.createMedication);
+patientRouter.put('/medications/:idPatient', medicationsController.updateMedication);
+patientRouter.delete('/medications/:idPatient', medicationsController.deleteMedication);
 
-patientRouter.get('/conditions/:idPatient', patientController.getConditions);
-patientRouter.post('/conditions/:idPatient', patientController.createCondition);
-patientRouter.put('/conditions/:idPatient', patientController.updateCondition);
-patientRouter.delete('/conditions/:idPatient', patientController.deleteCondition);
+patientRouter.get('/conditions/:idPatient', conditionsController.getConditions);
+patientRouter.post('/conditions/:idPatient', conditionsController.createCondition);
+patientRouter.put('/conditions/:idPatient', conditionsController.updateCondition);
+patientRouter.delete('/conditions/:idPatient', conditionsController.deleteCondition);
 
-patientRouter.get('/allergies/:idPatient', patientController.getAllergies);
-patientRouter.post('/allergies/:idPatient', patientController.createAllergy);
-patientRouter.delete('/allergies/:idPatient', patientController.deleteAllergy);
+patientRouter.get('/allergies/:idPatient', allergiesController.getAllergies);
+patientRouter.post('/allergies/:idPatient', allergiesController.createAllergy);
+patientRouter.delete('/allergies/:idPatient', allergiesController.deleteAllergy);
 
 module.exports = patientRouter;
