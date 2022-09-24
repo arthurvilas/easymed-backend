@@ -20,7 +20,13 @@ class ConditionsController {
     const { id: idCondition, isActive, isInFamily, symptoms } = req.body;
     const patient = await knex('patients').where('id', idPatient);
     const condition = await knex('conditions').where('id', idCondition);
-    // TODO: Check for existing condition?
+    const [existingCondition] = await knex('patients_conditions').where({
+      idPatient,
+      idCondition,
+    });
+    if (existingCondition) {
+      return res.status(400).json({ error: 'Condition already registered' });
+    }
     if (patient.length === 0 || condition.length === 0) {
       return res
         .status(400)

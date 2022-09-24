@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const attachJWTToRes = require('../utils/attachJWT');
 
 class PatientController {
-  async create(req, res) {
+  async createPatient(req, res) {
     const { name, cpf, phone, email, password } = req.body;
     const [unavailableEmail] = await knex('patients').where('email', email);
     if (unavailableEmail) {
@@ -34,7 +34,7 @@ class PatientController {
     });
   }
 
-  async get(req, res) {
+  async getPatient(req, res) {
     const { idPatient } = req.params;
     const [patient] = await knex('patients').where('id', idPatient);
     if (!patient) {

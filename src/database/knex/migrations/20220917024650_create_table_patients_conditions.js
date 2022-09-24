@@ -4,6 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable('patients_conditions', (table) => {
+    // TODO create index to store repeated conditions
     table.integer('idPatient').unsigned().notNullable();
     table.foreign('idPatient').references('id').inTable('patients');
 
@@ -13,6 +14,8 @@ exports.up = function (knex) {
     table.boolean('isActive');
     table.boolean('isInFamily');
     table.string('symptoms', 500);
+    table.date('startedAt');
+    table.date('stoppedAt');
   });
 };
 

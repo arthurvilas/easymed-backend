@@ -11,8 +11,8 @@ const medicationsController = new MedicationsController();
 
 const patientRouter = Router();
 
-patientRouter.get('/:idPatient', patientController.get);
-patientRouter.post('/signup', patientController.create);
+patientRouter.get('/:idPatient', patientController.getPatient);
+patientRouter.post('/signup', patientController.createPatient);
 
 patientRouter.get('/medications/:idPatient', medicationsController.getMedications);
 patientRouter.post('/medications/:idPatient', medicationsController.createMedication);
