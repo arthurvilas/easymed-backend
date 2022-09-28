@@ -1,6 +1,12 @@
 const knex = require('../database/knex');
 
 class ConditionsController {
+  async listConditions(req, res) {
+    const conditions = await knex.select().from('conditions');
+
+    res.json(conditions);
+  }
+
   async getConditions(req, res) {
     const { idPatient } = req.params;
     const patient = await knex('patients').where('id', idPatient);
