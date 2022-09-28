@@ -25,7 +25,7 @@ class PatientController {
     );
     attachJWTToRes(res, token);
 
-    res.status(201).json({
+    return res.status(201).json({
       id: patient_id,
       name,
       cpf,

@@ -4,7 +4,7 @@ class ConditionsController {
   async listConditions(req, res) {
     const conditions = await knex.select().from('conditions');
 
-    res.json(conditions);
+    return res.json(conditions);
   }
 
   async getConditions(req, res) {
@@ -18,7 +18,7 @@ class ConditionsController {
       .join('conditions as c', 'pc.idCondition', 'c.id')
       .where({ idPatient });
 
-    res.json(patientConditions);
+    return res.json(patientConditions);
   }
 
   async createCondition(req, res) {
@@ -46,7 +46,7 @@ class ConditionsController {
       symptoms,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       condition,
       isActive,
       isInFamily,

@@ -12,7 +12,7 @@ class MedicationsController {
       .join('medications as m', 'pm.idMedication', 'm.id')
       .where({ idPatient });
 
-    res.json(patientMedications);
+    return res.json(patientMedications);
   }
 
   async createMedication(req, res) {
@@ -44,7 +44,7 @@ class MedicationsController {
       startedAt,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       idPatient,
       idMedication,
       dosage,

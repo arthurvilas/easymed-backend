@@ -12,7 +12,7 @@ class AllergiesController {
       .join('allergies as a', 'pa.idAllergy', 'a.id')
       .where({ idPatient });
 
-    res.json(patientAllergies);
+    return res.json(patientAllergies);
   }
 
   async createAllergy(req, res) {
@@ -38,7 +38,7 @@ class AllergiesController {
       symptoms,
     });
 
-    res.status(201).json({ ...allergy, symptoms });
+    return res.status(201).json({ ...allergy, symptoms });
   }
 
   async deleteAllergy(req, res) {
