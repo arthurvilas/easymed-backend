@@ -1,5 +1,5 @@
 const knex = require('../database/knex');
-const { hash } = require('bcryptjs');
+const { hash, compare } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const attachJWTToRes = require('../utils/attachJWT');
 
@@ -32,6 +32,60 @@ class PatientController {
       phone,
       email,
     });
+  }
+
+  async updatePatient(req, res) {
+    const { idPatient } = req.params;
+    const [patient] = await knex('patients').where('id', idPatient);
+    if (!patient) {
+      return res.status(400).json({ error: 'No patient with id ' + idPatient });
+    }
+
+    let {
+      name,
+      cpf,
+      email,
+      password,
+      prevPassword,
+      phone,
+      height,
+      weight,
+      gender,
+      pictureUrl,
+      birthDate,
+    } = req.body;
+
+    if (password) {
+      if (!prevPassword) {
+        return res
+          .status(400)
+          .json({ error: 'Send previous password to update password' });
+      }
+      const passwordMatch = await compare(prevPassword, patient.password);
+      if (!passwordMatch) {
+        return res.status(400).json({ error: 'Passwords does not match' });
+      }
+      password = await hash(req.body.password, 8);
+    }
+
+    const date = new Date();
+    const updatedAt =
+      date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    await knex('patients').where({ id: idPatient }).update({
+      name,
+      cpf,
+      email,
+      password,
+      phone,
+      height,
+      weight,
+      gender,
+      pictureUrl,
+      birthDate,
+      updatedAt,
+    });
+
+    return res.status(204).json();
   }
 
   async getPatient(req, res) {

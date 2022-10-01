@@ -15,8 +15,8 @@ exports.up = function (knex) {
     table.enu('gender', ['male', 'female', 'other']);
     table.string('pictureUrl', 500);
     table.date('birthDate');
-    table.timestamp('created_at').defaultTo(knex.fn.now());
-    table.timestamp('updated_at').defaultTo(knex.fn.now());
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
 };
 

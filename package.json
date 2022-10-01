@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "npx knex migrate:latest && node src/index.js",
     "test": "nodemon src/index.js",
     "migrate": "knex migrate:latest --knexfile knexfile.js"
   },
@@ -25,5 +26,8 @@
     "@types/jsonwebtoken": "^8.5.9",
     "nodemon": "^2.0.19",
     "prettier": "^2.7.1"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
