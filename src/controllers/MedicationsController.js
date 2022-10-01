@@ -14,7 +14,7 @@ class MedicationsController {
 
     return res.json(patientMedications);
   }
-
+  // TODO remove started at stopped at automation
   async createMedication(req, res) {
     const { idPatient } = req.params;
     const { id: idMedication, dosage, isActive } = req.body;

@@ -23,7 +23,14 @@ class ConditionsController {
 
   async createCondition(req, res) {
     const { idPatient } = req.params;
-    const { id: idCondition, isActive, isInFamily, symptoms } = req.body;
+    const {
+      id: idCondition,
+      isActive,
+      isInFamily,
+      symptoms,
+      startedAt,
+      stoppedAt,
+    } = req.body;
     const patient = await knex('patients').where('id', idPatient);
     const condition = await knex('conditions').where('id', idCondition);
     const [existingCondition] = await knex('patients_conditions').where({
@@ -44,6 +51,8 @@ class ConditionsController {
       isActive,
       isInFamily,
       symptoms,
+      startedAt,
+      stoppedAt,
     });
 
     return res.status(201).json({
@@ -51,10 +60,13 @@ class ConditionsController {
       isActive,
       isInFamily,
       symptoms,
+      startedAt,
+      stoppedAt,
     });
   }
 
   async updateCondition(req, res) {
+    // TODO update only with relevant info
     const { idPatient } = req.params;
     const { id: idCondition, isActive, isInFamily, symptoms } = req.body;
     const [existingCondition] = await knex('patients_conditions').where({

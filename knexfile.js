@@ -2,7 +2,7 @@ require('dotenv').config();
 const path = require('path');
 
 /**
- * @type { Object.<string, import("knex").Knex.Config> }
+ * @type { Object.<string, import('knex').Knex.Config> }
  */
 module.exports = {
   development: {
@@ -12,6 +12,22 @@ module.exports = {
       user: 'easymeduser',
       password: process.env.MYSQL_PASSWORD,
     },
+    migrations: {
+      directory: path.resolve(
+        __dirname,
+        'src',
+        'database',
+        'knex',
+        'migrations'
+      ),
+      tableName: 'knex_migrations',
+    },
+    useNullAsDefault: true,
+  },
+
+  production: {
+    client: 'pg',
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: path.resolve(
         __dirname,
