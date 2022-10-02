@@ -11,27 +11,25 @@ class PatientController {
       return res.status(400).json({ error: 'Email already in use' });
     }
     const hashedPassword = await hash(password, 8);
-    const [patient_id] = await knex('patients').insert({
-      name,
-      cpf,
-      phone,
-      email,
-      password: hashedPassword,
-    });
+    const [patient] = await knex('patients').insert(
+      {
+        name,
+        cpf,
+        phone,
+        email,
+        password: hashedPassword,
+      },
+      '*'
+    );
 
     const token = jwt.sign(
-      { id: patient_id, role: 'patient' },
+      { id: patient.id, role: 'patient' },
       process.env.JWT_SECRET
     );
     attachJWTToRes(res, token);
 
-    return res.status(201).json({
-      id: patient_id,
-      name,
-      cpf,
-      phone,
-      email,
-    });
+    delete patient.password;
+    return res.status(201).json(patient);
   }
 
   async updatePatient(req, res) {
@@ -68,24 +66,29 @@ class PatientController {
       password = await hash(req.body.password, 8);
     }
 
-    const date = new Date();
-    const updatedAt =
-      date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-    await knex('patients').where({ id: idPatient }).update({
-      name,
-      cpf,
-      email,
-      password,
-      phone,
-      height,
-      weight,
-      gender,
-      pictureUrl,
-      birthDate,
-      updatedAt,
-    });
+    const updatedAt = new Date();
 
-    return res.status(204).json();
+    const [updatedPatient] = await knex('patients')
+      .where({ id: idPatient })
+      .update(
+        {
+          name,
+          cpf,
+          email,
+          password,
+          phone,
+          height,
+          weight,
+          gender,
+          pictureUrl,
+          birthDate,
+          updatedAt,
+        },
+        '*'
+      );
+
+    delete updatedPatient.password;
+    return res.status(200).json(updatedPatient);
   }
 
   async getPatient(req, res) {
