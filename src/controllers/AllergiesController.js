@@ -3,8 +3,8 @@ const knex = require('../database/knex');
 class AllergiesController {
   async getAllergies(req, res) {
     const { idPatient } = req.params;
-    const patient = await knex('patients').where('id', idPatient);
-    if (patient.length === 0) {
+    const [patient] = await knex('patients').where('id', idPatient);
+    if (!patient) {
       return res.status(400).json({ error: 'No patient with id ' + idPatient });
     }
     const patientAllergies = await knex('patients_allergies as pa')
@@ -18,9 +18,9 @@ class AllergiesController {
   async createAllergy(req, res) {
     const { idPatient } = req.params;
     const { id: idAllergy, symptoms } = req.body;
-    const patient = await knex('patients').where('id', idPatient);
-    const allergy = await knex('allergies').where('id', idAllergy);
-    if (patient.length === 0 || allergy.length === 0) {
+    const [patient] = await knex('patients').where('id', idPatient);
+    const [allergy] = await knex('allergies').where('id', idAllergy);
+    if (!patient || !allergy) {
       return res
         .status(400)
         .json({ error: "Provide existing Patient and Allergy id's" });
@@ -32,13 +32,18 @@ class AllergiesController {
     if (existingAllergy) {
       return res.status(400).json({ error: 'Allergy already registered' });
     }
-    await knex('patients_allergies').insert({
-      idPatient,
-      idAllergy,
-      symptoms,
-    });
+    const [createdAllergy] = await knex('patients_allergies').insert(
+      {
+        idPatient,
+        idAllergy,
+        symptoms,
+      },
+      '*'
+    );
 
-    return res.status(201).json({ ...allergy, symptoms });
+    return res
+      .status(201)
+      .json({ ...createdAllergy, description: allergy.description });
   }
 
   async deleteAllergy(req, res) {
@@ -57,7 +62,6 @@ class AllergiesController {
         idAllergy,
       })
       .del();
-    delete existingAllergy.idPatient;
 
     return res.status(200).json(existingAllergy);
   }
