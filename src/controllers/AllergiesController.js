@@ -1,6 +1,12 @@
 const knex = require('../database/knex');
 
 class AllergiesController {
+  async listAllergies(req, res) {
+    const allergies = await knex.select().from('allergies');
+
+    return res.json(allergies);
+  }
+
   async getAllergies(req, res) {
     const { idPatient } = req.params;
     const [patient] = await knex('patients').where('id', idPatient);
