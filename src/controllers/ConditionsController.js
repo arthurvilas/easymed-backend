@@ -9,8 +9,8 @@ class ConditionsController {
 
   async getConditions(req, res) {
     const { idPatient } = req.params;
-    const patient = await knex('patients').where('id', idPatient);
-    if (patient.length === 0) {
+    const [patient] = await knex('patients').where('id', idPatient);
+    if (!patient) {
       return res.status(400).json({ error: 'No patient with id ' + idPatient });
     }
     const patientConditions = await knex('patients_conditions as pc')
@@ -31,8 +31,13 @@ class ConditionsController {
       startedAt,
       stoppedAt,
     } = req.body;
-    const patient = await knex('patients').where('id', idPatient);
-    const condition = await knex('conditions').where('id', idCondition);
+    const [patient] = await knex('patients').where('id', idPatient);
+    const [condition] = await knex('conditions').where('id', idCondition);
+    if (!patient || !condition) {
+      return res
+        .status(400)
+        .json({ error: "Provide existing Patient and Condition id's" });
+    }
     const [existingCondition] = await knex('patients_conditions').where({
       idPatient,
       idCondition,
@@ -40,35 +45,32 @@ class ConditionsController {
     if (existingCondition) {
       return res.status(400).json({ error: 'Condition already registered' });
     }
-    if (patient.length === 0 || condition.length === 0) {
-      return res
-        .status(400)
-        .json({ error: "Provide existing Patient and Condition id's" });
-    }
-    await knex('patients_conditions').insert({
-      idPatient,
-      idCondition,
-      isActive,
-      isInFamily,
-      symptoms,
-      startedAt,
-      stoppedAt,
-    });
+    const [createdCondition] = await knex('patients_conditions').insert(
+      {
+        idPatient,
+        idCondition,
+        isActive,
+        isInFamily,
+        symptoms,
+        startedAt,
+        stoppedAt,
+      },
+      '*'
+    );
 
-    return res.status(201).json({
-      condition,
-      isActive,
-      isInFamily,
-      symptoms,
-      startedAt,
-      stoppedAt,
-    });
+    return res.status(201).json({ ...createdCondition, name: condition.name });
   }
 
   async updateCondition(req, res) {
-    // TODO update only with relevant info
     const { idPatient } = req.params;
-    const { id: idCondition, isActive, isInFamily, symptoms } = req.body;
+    const {
+      id: idCondition,
+      isActive,
+      isInFamily,
+      symptoms,
+      startedAt,
+      stoppedAt,
+    } = req.body;
     const [existingCondition] = await knex('patients_conditions').where({
       idPatient,
       idCondition,
@@ -76,18 +78,23 @@ class ConditionsController {
     if (!existingCondition) {
       return res.status(400).json({ error: 'Condition not registered' });
     }
-    await knex('patients_conditions')
+    const [updatedCondition] = await knex('patients_conditions')
       .where({
         idPatient,
         idCondition,
       })
-      .update({
-        isActive,
-        isInFamily,
-        symptoms,
-      });
+      .update(
+        {
+          isActive,
+          isInFamily,
+          symptoms,
+          startedAt,
+          stoppedAt,
+        },
+        '*'
+      );
 
-    return res.json({ id: idCondition, isActive, isInFamily, symptoms });
+    return res.json(updatedCondition);
   }
 
   async deleteCondition(req, res) {
