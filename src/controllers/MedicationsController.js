@@ -1,10 +1,16 @@
 const knex = require('../database/knex');
 
 class MedicationsController {
+  async listMedications(req, res) {
+    const medications = await knex.select().from('medications');
+
+    return res.json(medications);
+  }
+
   async getMedications(req, res) {
     const { idPatient } = req.params;
-    const patient = await knex('patients').where('id', idPatient);
-    if (patient.length === 0) {
+    const [patient] = await knex('patients').where('id', idPatient);
+    if (!patient) {
       return res.status(400).json({ error: 'No patient with id ' + idPatient });
     }
     const patientMedications = await knex('patients_medications as pm')
@@ -17,10 +23,16 @@ class MedicationsController {
   // TODO remove started at stopped at automation
   async createMedication(req, res) {
     const { idPatient } = req.params;
-    const { id: idMedication, dosage, isActive } = req.body;
-    const patient = await knex('patients').where('id', idPatient);
-    const medication = await knex('medications').where('id', idMedication);
-    if (patient.length === 0 || medication.length === 0) {
+    const {
+      id: idMedication,
+      dosage,
+      isActive,
+      startedAt,
+      stoppedAt,
+    } = req.body;
+    const [patient] = await knex('patients').where('id', idPatient);
+    const [medication] = await knex('medications').where('id', idMedication);
+    if (!patient || !medication) {
       return res
         .status(400)
         .json({ error: "Provide existing Patient and Medication id's" });
@@ -32,30 +44,33 @@ class MedicationsController {
     if (existingMedication) {
       return res.status(400).json({ error: 'Medication already registered' });
     }
-    const date = new Date();
-    const startedAt =
-      date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 
-    await knex('patients_medications').insert({
-      idPatient,
-      idMedication,
-      dosage,
-      isActive,
-      startedAt,
-    });
+    const [createdMedication] = await knex('patients_medications').insert(
+      {
+        idPatient,
+        idMedication,
+        dosage,
+        isActive,
+        startedAt,
+        stoppedAt,
+      },
+      '*'
+    );
 
-    return res.status(201).json({
-      idPatient,
-      idMedication,
-      dosage,
-      isActive,
-      startedAt,
-    });
+    return res
+      .status(201)
+      .json({ ...createdMedication, name: medication.name });
   }
 
   async updateMedication(req, res) {
     const { idPatient } = req.params;
-    let { id: idMedication, dosage, isActive, startedAt, stoppedAt } = req.body;
+    const {
+      id: idMedication,
+      dosage,
+      isActive,
+      startedAt,
+      stoppedAt,
+    } = req.body;
     const [existingMedication] = await knex('patients_medications').where({
       idPatient,
       idMedication,
@@ -63,31 +78,22 @@ class MedicationsController {
     if (!existingMedication) {
       return res.status(400).json({ error: 'Medication not registered' });
     }
-
-    const date = new Date();
-    if (existingMedication.isActive === 1 && isActive === false) {
-      stoppedAt =
-        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-    }
-    await knex('patients_medications')
+    const [updatedMedication] = await knex('patients_medications')
       .where({
         idPatient,
         idMedication,
       })
-      .update({
-        dosage,
-        isActive,
-        startedAt,
-        stoppedAt,
-      });
+      .update(
+        {
+          dosage,
+          isActive,
+          startedAt,
+          stoppedAt,
+        },
+        '*'
+      );
 
-    return res.json({
-      id: idMedication,
-      dosage,
-      isActive,
-      startedAt: existingMedication.startedAt,
-      stoppedAt,
-    });
+    return res.json(updatedMedication);
   }
 
   async deleteMedication(req, res) {
