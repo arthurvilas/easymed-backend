@@ -97,8 +97,8 @@ class PatientController {
     if (!patient) {
       return res.status(400).json({ error: 'No patient with id ' + idPatient });
     }
-    delete patient.password;
 
+    delete patient.password;
     return res.json(patient);
   }
 }
