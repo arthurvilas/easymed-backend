@@ -9,11 +9,11 @@ const login = async (req, res) => {
   let roles = {};
   [
     roles.patient,
-    // roles.doctor,
+    roles.doctor,
     // roles.admin
   ] = await Promise.all([
     await knex('patients').where('email', email),
-    // await knex('doctor').where('email', email),
+    await knex('doctors').where('email', email),
     // await knex('admin').where('email', email),
   ]);
 

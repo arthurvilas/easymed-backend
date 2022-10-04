@@ -4,11 +4,10 @@ const doctorsController = new DoctorsController();
 
 const doctorsRouter = Router();
 
+doctorsRouter.post('/signup', doctorsController.createDoctor);
 doctorsRouter
   .route('/:idDoctor')
   .get(doctorsController.getDoctor)
   .patch(doctorsController.updateDoctor);
-
-doctorsRouter.post('/signup', doctorsController.createDoctor);
 
 module.exports = doctorsRouter;
