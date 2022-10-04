@@ -4,8 +4,8 @@ const attachJWTToRes = (resObj, token) => {
     httpOnly: true,
     expires: new Date(Date.now() + day),
     secure: process.env.NODE_ENV === 'production',
-    signed: true
+    signed: true,
   });
-}
+};
 
 module.exports = attachJWTToRes;

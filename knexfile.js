@@ -6,11 +6,11 @@ const path = require('path');
  */
 module.exports = {
   development: {
-    client: 'mysql2',
+    client: 'pg',
     connection: {
       database: 'easymed',
       user: 'easymeduser',
-      password: process.env.MYSQL_PASSWORD,
+      password: process.env.POSTGRES_PASSWORD,
     },
     migrations: {
       directory: path.resolve(

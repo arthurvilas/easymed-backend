@@ -22,7 +22,11 @@ const login = async (req, res) => {
       const [entity] = roles[role];
       const passwordMatch = await compare(password, entity.password);
       if (passwordMatch) {
-        const token = jwt.sign({ id: entity.id, role }, process.env.JWT_SECRET);
+        const token = jwt.sign(
+          { id: entity.id, role },
+          process.env.JWT_SECRET,
+          { algorithm: 'HS256' }
+        );
         attachJWTToRes(res, token);
         return res.json(entity);
       }
