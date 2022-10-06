@@ -4,6 +4,8 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable('patients_medications', (table) => {
+    table.increments('id');
+
     table.integer('idPatient').unsigned().notNullable();
     table.foreign('idPatient').references('id').inTable('patients');
 

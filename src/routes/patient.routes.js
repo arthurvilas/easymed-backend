@@ -17,5 +17,4 @@ patientRouter.get('/:idPatient', patientController.getPatient);
 patientRouter.patch('/:idPatient', patientController.updatePatient);
 patientRouter.post('/signup', patientController.createPatient);
 
-
 module.exports = patientRouter;
