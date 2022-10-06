@@ -53,7 +53,7 @@
 <strong class="request-method border-success">POST</strong>
 &nbsp;
 {{URLv1}}/patients/conditions/{{idPatient}}</h4></a></div><div id=collapse-Conditions-CreateCondition class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-&#34;id&#34;: 1,
+&#34;idCondition&#34;: 1,
 &#34;isActive&#34;: false,
 &#34;isInFamily&#34;: false,
 &#34;symptoms&#34;: &#34;headaches&#34;
@@ -61,14 +61,14 @@
 <a class=text-warning data-toggle=collapse data-parent=#accordion-Conditions href=#collapse-Conditions-UpdateCondition><h4 class=panel-title><span class="glyphicon glyphicon-plus"></span><strong>Update Condition</strong> &nbsp;|&nbsp;
 <strong class="request-method border-warning">PATCH</strong>
 &nbsp;
-{{URLv1}}/patients/conditions/{{idPatient}}</h4></a></div><div id=collapse-Conditions-UpdateCondition class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+{{URLv1}}/patients/conditions</h4></a></div><div id=collapse-Conditions-UpdateCondition class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
 &#34;id&#34;: 1,
-&#34;startedAt&#34;: &#34;2022-01-01&#34;
+&#34;symptoms&#34;: &#34;cough and sneezes&#34;
 }</span><div class=clearfix></div></div></div></div><div class="panel panel-danger" id=jump-Conditions-DeleteCondition><div class=panel-heading><small class="pull-right text-muted">raw</small>
 <a class=text-danger data-toggle=collapse data-parent=#accordion-Conditions href=#collapse-Conditions-DeleteCondition><h4 class=panel-title><span class="glyphicon glyphicon-plus"></span><strong>Delete Condition</strong> &nbsp;|&nbsp;
 <strong class="request-method border-danger">DELETE</strong>
 &nbsp;
-{{URLv1}}/patients/conditions/{{idPatient}}</h4></a></div><div id=collapse-Conditions-DeleteCondition class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+{{URLv1}}/patients/conditions</h4></a></div><div id=collapse-Conditions-DeleteCondition class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
 &#34;id&#34;: 1
 }</span><div class=clearfix></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class=panel-heading><h3 class=panel-title id=Medications>Medications
 <span class=badge>5</span></h3></div><div class=panel-body><p><div class=request-item><div class=panel-group id=accordion-Medications><div class="panel panel-info" id=jump-Medications-ListMedications><div class=panel-heading><small class="pull-right text-muted"></small><a class=text-info data-toggle=collapse data-parent=#accordion-Medications href=#collapse-Medications-ListMedications><h4 class=panel-title><span class="glyphicon glyphicon-plus"></span><strong>List Medications</strong> &nbsp;|&nbsp;
@@ -82,15 +82,17 @@
 <strong class="request-method border-success">POST</strong>
 &nbsp;
 {{URLv1}}/patients/medications/{{idPatient}}</h4></a></div><div id=collapse-Medications-CreateMedication class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
-&#34;id&#34;: 1,
+&#34;idMedication&#34;: 1,
 &#34;dosage&#34;: 0.4,
+&#34;type&#34;: &#34;mg&#34;,
+&#34;frequency&#34;: &#34;2 por dia&#34;,
 &#34;isActive&#34;: true,
 &#34;startedAt&#34;: &#34;2022-01-01&#34;
 }</span><div class=clearfix></div></div></div></div><div class="panel panel-warning" id=jump-Medications-UpdateMedication><div class=panel-heading><small class="pull-right text-muted">raw</small>
 <a class=text-warning data-toggle=collapse data-parent=#accordion-Medications href=#collapse-Medications-UpdateMedication><h4 class=panel-title><span class="glyphicon glyphicon-plus"></span><strong>Update Medication</strong> &nbsp;|&nbsp;
 <strong class="request-method border-warning">PATCH</strong>
 &nbsp;
-{{URLv1}}/patients/medications/{{idPatient}}</h4></a></div><div id=collapse-Medications-UpdateMedication class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+{{URLv1}}/patients/medications</h4></a></div><div id=collapse-Medications-UpdateMedication class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
 &#34;id&#34;: 1,
 &#34;dosage&#34;: 0.5,
 &#34;isActive&#34;: false
@@ -98,7 +100,7 @@
 <a class=text-danger data-toggle=collapse data-parent=#accordion-Medications href=#collapse-Medications-DeleteMedication><h4 class=panel-title><span class="glyphicon glyphicon-plus"></span><strong>Delete Medication</strong> &nbsp;|&nbsp;
 <strong class="request-method border-danger">DELETE</strong>
 &nbsp;
-{{URLv1}}/patients/medications/{{idPatient}}</h4></a></div><div id=collapse-Medications-DeleteMedication class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
+{{URLv1}}/patients/medications</h4></a></div><div id=collapse-Medications-DeleteMedication class="panel-collapse collapse"><div class=panel-body><h5 class="label label-primary">Body</h5><span class=resp-prettyprint>{
 &#34;id&#34;: 1
 }</span><div class=clearfix></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class=panel-heading><h3 class=panel-title id=Auth>Auth
 <span class=badge>1</span></h3></div><div class=panel-body><p><div class=request-item><div class=panel-group id=accordion-Auth><div class="panel panel-success" id=jump-Auth-Login><div class=panel-heading><small class="pull-right text-muted">raw</small>
@@ -116,4 +118,4 @@ if(IsJsonString(html)){var obj=JSON.parse(html);var formattedJson=JSON.stringify
 function IsJsonString(str){try{JSON.parse(str);}catch(e){return false;}
 return true;}
 String.prototype.replaceAll=function(replaceThis,withThis){var re=new RegExp(RegExp.quote(replaceThis),"g");return this.replace(re,withThis);};RegExp.quote=function(str){return str.replace(/([.?*+^$[\]\\(){}-])/g,"\\$1");};function syntaxHighlight(json){json=json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,function(match){var cls='number';if(/^"/.test(match)){if(/:$/.test(match)){cls='key';}else{cls='string';}}else if(/true|false/.test(match)){cls='boolean';}else if(/null/.test(match)){cls='null';}
-return '<span class="'+cls+'">'+match+'</span>';});}</script><br><br><footer class="navbar-default navbar-fixed-bottom"><div class=container-fluid><div class="span12 text-center"><span data-toggle=tooltip title="If the application help you, please feel free to give a star to the project in github. Your star inspire me to work more on open-source projects like this!">Generated at 2022-10-03 22:04:42 by <a href=https://github.com/thedevsaddam/docgen target=_blank class=text-muted>docgen</a></span></div></div></footer>
+return '<span class="'+cls+'">'+match+'</span>';});}</script><br><br><footer class="navbar-default navbar-fixed-bottom"><div class=container-fluid><div class="span12 text-center"><span data-toggle=tooltip title="If the application help you, please feel free to give a star to the project in github. Your star inspire me to work more on open-source projects like this!">Generated at 2022-10-06 20:15:32 by <a href=https://github.com/thedevsaddam/docgen target=_blank class=text-muted>docgen</a></span></div></div></footer>
