@@ -24,7 +24,7 @@ class ConditionsController {
   async createCondition(req, res) {
     const { idPatient } = req.params;
     const {
-      id: idCondition,
+      idCondition,
       isActive,
       isInFamily,
       symptoms,
@@ -37,13 +37,6 @@ class ConditionsController {
       return res
         .status(400)
         .json({ error: "Provide existing Patient and Condition id's" });
-    }
-    const [existingCondition] = await knex('patients_conditions').where({
-      idPatient,
-      idCondition,
-    });
-    if (existingCondition) {
-      return res.status(400).json({ error: 'Condition already registered' });
     }
     const [createdCondition] = await knex('patients_conditions').insert(
       {
@@ -62,9 +55,8 @@ class ConditionsController {
   }
 
   async updateCondition(req, res) {
-    const { idPatient } = req.params;
     const {
-      id: idCondition,
+      id: idRelation,
       isActive,
       isInFamily,
       symptoms,
@@ -72,16 +64,14 @@ class ConditionsController {
       stoppedAt,
     } = req.body;
     const [existingCondition] = await knex('patients_conditions').where({
-      idPatient,
-      idCondition,
+      id: idRelation,
     });
     if (!existingCondition) {
       return res.status(400).json({ error: 'Condition not registered' });
     }
     const [updatedCondition] = await knex('patients_conditions')
       .where({
-        idPatient,
-        idCondition,
+        id: idRelation,
       })
       .update(
         {
@@ -98,19 +88,16 @@ class ConditionsController {
   }
 
   async deleteCondition(req, res) {
-    const { idPatient } = req.params;
-    const { id: idCondition } = req.body;
+    const { id: idRelation } = req.body;
     const [existingCondition] = await knex('patients_conditions').where({
-      idPatient,
-      idCondition,
+      id: idRelation,
     });
     if (!existingCondition) {
       return res.status(400).json({ error: 'Condition not registered' });
     }
     await knex('patients_conditions')
       .where({
-        idPatient,
-        idCondition,
+        id: idRelation,
       })
       .del();
 

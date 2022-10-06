@@ -20,12 +20,14 @@ class MedicationsController {
 
     return res.json(patientMedications);
   }
-  // TODO remove started at stopped at automation
+
   async createMedication(req, res) {
     const { idPatient } = req.params;
     const {
-      id: idMedication,
+      idMedication,
       dosage,
+      type,
+      frequency,
       isActive,
       startedAt,
       stoppedAt,
@@ -37,19 +39,13 @@ class MedicationsController {
         .status(400)
         .json({ error: "Provide existing Patient and Medication id's" });
     }
-    const [existingMedication] = await knex('patients_medications').where({
-      idPatient,
-      idMedication,
-    });
-    if (existingMedication) {
-      return res.status(400).json({ error: 'Medication already registered' });
-    }
-
     const [createdMedication] = await knex('patients_medications').insert(
       {
         idPatient,
         idMedication,
         dosage,
+        type,
+        frequency,
         isActive,
         startedAt,
         stoppedAt,
@@ -63,25 +59,22 @@ class MedicationsController {
   }
 
   async updateMedication(req, res) {
-    const { idPatient } = req.params;
     const {
-      id: idMedication,
+      id: idRelation,
       dosage,
       isActive,
       startedAt,
       stoppedAt,
     } = req.body;
     const [existingMedication] = await knex('patients_medications').where({
-      idPatient,
-      idMedication,
+      id: idRelation
     });
     if (!existingMedication) {
       return res.status(400).json({ error: 'Medication not registered' });
     }
     const [updatedMedication] = await knex('patients_medications')
       .where({
-        idPatient,
-        idMedication,
+        id: idRelation
       })
       .update(
         {
@@ -97,19 +90,16 @@ class MedicationsController {
   }
 
   async deleteMedication(req, res) {
-    const { idPatient } = req.params;
-    const { id: idMedication } = req.body;
+    const { id: idRelation } = req.body;
     const [existingMedication] = await knex('patients_medications').where({
-      idPatient,
-      idMedication,
+      id: idRelation
     });
     if (!existingMedication) {
       return res.status(400).json({ error: 'Medication not registered' });
     }
     await knex('patients_medications')
       .where({
-        idPatient,
-        idMedication,
+        id: idRelation
       })
       .del();
 
