@@ -4,7 +4,8 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable('patients_conditions', (table) => {
-    // TODO create index to store repeated conditions
+    table.increments('id');
+
     table.integer('idPatient').unsigned().notNullable();
     table.foreign('idPatient').references('id').inTable('patients');
 

@@ -38,7 +38,7 @@ class DoctorsController {
       return res.json(400).json({ error: 'No doctor with id ' + id });
     }
 
-    const { name, email, crm, password, prevPassword } = req.body;
+    let { name, email, crm, password, prevPassword } = req.body;
     if (password) {
       if (!prevPassword) {
         return res
