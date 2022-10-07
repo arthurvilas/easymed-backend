@@ -28,7 +28,9 @@ const login = async (req, res) => {
           { algorithm: 'HS256' }
         );
         attachJWTToRes(res, token);
-        return res.json(entity);
+
+        delete entity.password;
+        return res.set({ withCredentials: true }).json(entity);
       }
     }
   }
