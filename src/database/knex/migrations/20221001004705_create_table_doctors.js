@@ -9,6 +9,7 @@ exports.up = function (knex) {
     table.string('email', 60).notNullable();
     table.string('password', 255).notNullable();
     table.string('crm', 20).notNullable();
+    table.string('pictureUrl', 1000);
     table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });
