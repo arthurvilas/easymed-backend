@@ -1,7 +1,6 @@
 const knex = require('../database/knex');
 const { compare } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const attachJWTToRes = require('../utils/attachJWT');
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -23,14 +22,18 @@ const login = async (req, res) => {
       const passwordMatch = await compare(password, entity.password);
       if (passwordMatch) {
         const token = jwt.sign(
-          { id: entity.id, role },
+          {
+            id: entity.id,
+            role,
+            email: entity.email,
+            pictureUrl: entity.pictureUrl,
+          },
           process.env.JWT_SECRET,
           { algorithm: 'HS256' }
         );
-        attachJWTToRes(res, token);
 
         delete entity.password;
-        return res.set({ withCredentials: true }).json(entity);
+        return res.json({ ...entity, token });
       }
     }
   }
