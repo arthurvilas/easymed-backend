@@ -25,10 +25,9 @@ class DoctorsController {
       { id: doctor.id, role: 'doctor' },
       process.env.JWT_SECRET
     );
-    attachJWTToRes(res, token);
 
     delete doctor.password;
-    return res.status(201).json(doctor);
+    return res.status(201).json({ ...doctor, token });
   }
 
   async updateDoctor(req, res) {
