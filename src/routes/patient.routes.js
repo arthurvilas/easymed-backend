@@ -6,13 +6,14 @@ const patientController = new PatientController();
 const medicationsRouter = require('./medications.routes');
 const conditionRouter = require('./conditions.routes');
 const allergiesRouter = require('./allergies.routes');
+const diagnosesRouter = require('./diagnoses.routes');
 
 const patientRouter = Router();
 
 patientRouter.use('/medications', medicationsRouter);
 patientRouter.use('/conditions', conditionRouter);
 patientRouter.use('/allergies', allergiesRouter);
-
+patientRouter.use('/diagnoses', diagnosesRouter)
 
 
 patientRouter.get('/:idPatient', patientController.getPatient);

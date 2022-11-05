@@ -1,7 +1,6 @@
 const { hash } = require('bcryptjs');
 const knex = require('../database/knex');
 const jwt = require('jsonwebtoken');
-const attachJWTToRes = require('../utils/attachJWT');
 
 class DoctorsController {
   async createDoctor(req, res) {

@@ -103,6 +103,8 @@ class ConditionsController {
 
     return res.json(existingCondition);
   }
+
+  // TODO get family conditions
 }
 
 module.exports = ConditionsController;
