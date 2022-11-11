@@ -13,7 +13,7 @@ exports.up = function (knex) {
     table.foreign('idDoctor').references('id').inTable('doctors');
 
     table.enu('examType', ['sangue', 'urina', 'ultrassom']);
-    table.string('local', 500);
+    table.string('location', 500);
     table.string('summary', 1000);
     table.timestamp('date');
     table.timestamp('createdAt').defaultTo(knex.fn.now());

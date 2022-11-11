@@ -12,6 +12,9 @@ exports.up = function (knex) {
     table.integer('idCondition').unsigned().notNullable();
     table.foreign('idCondition').references('id').inTable('conditions');
 
+    table.integer('idDiagnosis').unsigned()
+    table.foreign('idDiagnosis').references('id').inTable('diagnoses');
+
     table.boolean('isActive');
     table.boolean('isInFamily');
     table.string('symptoms', 500);

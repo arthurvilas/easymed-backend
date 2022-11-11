@@ -4,12 +4,9 @@ class DiagnosesController {
   async getDiagnosis(req, res) {
     // TODO also return related exams
     const { idPatient } = req.params;
-    const [patient] = await knex('patients').where('id', idPatient);
-    if (!patient) {
-      return res.status(400).json({ error: 'No patient with id ' + idPatient });
-    }
-    const patientsDiagnosis = await knex('diagnoses').where({ idPatient });
-    return res.json(patientsDiagnosis);
+    const patientDiagnoses = await knex('diagnoses').where({ idPatient });
+
+    return res.json(patientDiagnoses);
   }
 
   async createDiagnosis(req, res) {
@@ -68,8 +65,8 @@ class DiagnosesController {
     const { idDiagnosis } = req.body;
     // const reqDoctor = req.id;
     // const doctor = knex('doctors').where({id: reqDoctor});
-    const diagnoses = await knex('diagnoses').where({ id: idDiagnosis });
-    if (!diagnoses) {
+    const [diagnosis] = await knex('diagnoses').where({ id: idDiagnosis });
+    if (!diagnosis) {
       return res
         .status(400)
         .json({ error: 'No diagnosis with id' + idDiagnosis });
@@ -77,9 +74,9 @@ class DiagnosesController {
     let { description, diagnosisUrl, idExams } = req.body;
 
     // DIAGNOSIS TABLE
-    let updatedDiagnoses;
+    let updatedDiagnosis = {};
     if (description || diagnosisUrl) {
-      [updatedDiagnoses] = await knex('diagnoses')
+      [updatedDiagnosis] = await knex('diagnoses')
         .where({ id: idDiagnosis })
         .update({ description, diagnosisUrl }, '*');
     }
@@ -101,7 +98,7 @@ class DiagnosesController {
         }
       }
     }
-    return res.json({ ...updatedDiagnoses, exams: idExams });
+    return res.json({ ...updatedDiagnosis, exams: idExams });
   }
 
   async deleteDiagnosisExam(req, res) {

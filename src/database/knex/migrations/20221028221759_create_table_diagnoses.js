@@ -12,12 +12,6 @@ exports.up = function (knex) {
     table.integer('idDoctor').unsigned().notNullable();
     table.foreign('idDoctor').references('id').inTable('doctors');
 
-    table.integer('idPatientCondition').unsigned().notNullable();
-    table
-      .foreign('idPatientCondition')
-      .references('id')
-      .inTable('patients_conditions');
-
     table.string('description', 5000);
     table.string('diagnosisUrl', 2000).notNullable();
     table.timestamp('createdAt').defaultTo(knex.fn.now());
