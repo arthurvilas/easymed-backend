@@ -12,10 +12,9 @@ exports.up = function (knex) {
     table.integer('idCondition').unsigned().notNullable();
     table.foreign('idCondition').references('id').inTable('conditions');
 
-    table.integer('idDiagnosis').unsigned()
+    table.integer('idDiagnosis').unsigned();
     table.foreign('idDiagnosis').references('id').inTable('diagnoses');
 
-    table.boolean('isActive');
     table.boolean('isInFamily');
     table.string('symptoms', 500);
     table.date('startedAt');
@@ -25,7 +24,7 @@ exports.up = function (knex) {
 
 /**
  * @param { import('knex').Knex } knex
- * @returns { Promise<void> }
+ * @returns {Knex.SchemaBuilder}
  */
 exports.down = function (knex) {
   return knex.schema.dropTableIfExists('patients_conditions');

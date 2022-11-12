@@ -23,7 +23,7 @@ class AllergiesController {
 
   async createAllergy(req, res) {
     const { idPatient } = req.params;
-    const { id: idAllergy, symptoms } = req.body;
+    const { idAllergy, symptoms } = req.body;
     const [patient] = await knex('patients').where('id', idPatient);
     const [allergy] = await knex('allergies').where('id', idAllergy);
     if (!patient || !allergy) {
@@ -54,7 +54,7 @@ class AllergiesController {
 
   async deleteAllergy(req, res) {
     const { idPatient } = req.params;
-    const { id: idAllergy } = req.body;
+    const { idAllergy } = req.body;
     const [existingAllergy] = await knex('patients_allergies').where({
       idPatient,
       idAllergy,

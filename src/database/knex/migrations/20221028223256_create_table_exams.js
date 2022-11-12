@@ -9,9 +9,6 @@ exports.up = function (knex) {
     table.integer('idPatient').unsigned().notNullable();
     table.foreign('idPatient').references('id').inTable('patients');
 
-    table.integer('idDoctor').unsigned().notNullable();
-    table.foreign('idDoctor').references('id').inTable('doctors');
-
     table.enu('examType', ['sangue', 'urina', 'ultrassom']);
     table.string('location', 500);
     table.string('summary', 1000);

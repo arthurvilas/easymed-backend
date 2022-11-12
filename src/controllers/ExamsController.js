@@ -8,11 +8,10 @@ class ExamsController {
     return res.json(patientExams);
   }
 
-  // TODO remove iddoctor
   async createExam(req, res) {
-    const { idPatient, idDoctor, examType, location, summary, date } = req.body;
+    const { idPatient, examType, location, summary, date } = req.body;
     const [patient] = await knex('patients').where('id', idPatient);
-    const [doctor] = await knex('doctors').where('id', idDoctor);
+    const [doctor] = await knex('doctors').where('id');
     if (!patient || !doctor) {
       return res.status(404).json({
         error: 'Provide an existing patient, doctor and patientCondition',
@@ -22,7 +21,6 @@ class ExamsController {
     const [createdExam] = await knex('exams').insert(
       {
         idPatient,
-        idDoctor,
         examType,
         location,
         summary,
@@ -46,8 +44,8 @@ class ExamsController {
 
     let { examType, location, summary, date } = req.body;
     const [updatedExam] = await knex('exams')
-      .where({ idExam })
-      .update({ examType, location, summary, date });
+      .where({ id: idExam })
+      .update({ examType, location, summary, date }, '*');
 
     return res.json(updatedExam);
   }
@@ -62,7 +60,7 @@ class ExamsController {
         .json({ error: 'No exam with id' + idExam });
     }
 
-    await knex('diagnosis_exams')
+    await knex('exams')
       .where({ id: idExam })
       .del();
 

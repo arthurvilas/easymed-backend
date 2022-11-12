@@ -24,8 +24,8 @@ class ConditionsController {
   async createCondition(req, res) {
     const { idPatient } = req.params;
     const {
+      idDiagnosis,
       idCondition,
-      isActive,
       isInFamily,
       symptoms,
       startedAt,
@@ -40,9 +40,9 @@ class ConditionsController {
     }
     const [createdCondition] = await knex('patients_conditions').insert(
       {
+        idDiagnosis,
         idPatient,
         idCondition,
-        isActive,
         isInFamily,
         symptoms,
         startedAt,
@@ -56,8 +56,7 @@ class ConditionsController {
 
   async updateCondition(req, res) {
     const {
-      id: idRelation,
-      isActive,
+      idRelation,
       isInFamily,
       symptoms,
       startedAt,
@@ -75,7 +74,6 @@ class ConditionsController {
       })
       .update(
         {
-          isActive,
           isInFamily,
           symptoms,
           startedAt,
@@ -88,7 +86,7 @@ class ConditionsController {
   }
 
   async deleteCondition(req, res) {
-    const { id: idRelation } = req.body;
+    const { idRelation } = req.body;
     const [existingCondition] = await knex('patients_conditions').where({
       id: idRelation,
     });
@@ -104,7 +102,7 @@ class ConditionsController {
     return res.json(existingCondition);
   }
 
-  // TODO get family conditions
+  // TODO get family conditions - só filtrar mesmo
 }
 
 module.exports = ConditionsController;

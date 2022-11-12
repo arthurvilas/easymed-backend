@@ -2,9 +2,14 @@ const knex = require('../database/knex');
 
 class DiagnosesController {
   async getDiagnosis(req, res) {
-    // TODO also return related exams
     const { idPatient } = req.params;
     const patientDiagnoses = await knex('diagnoses').where({ idPatient });
+
+    for (const diagnosis of patientDiagnoses) {
+      diagnosis.relatedExams = await knex('diagnoses_exams').where({
+        idDiagnosis: diagnosis.id,
+      });
+    }
 
     return res.json(patientDiagnoses);
   }
@@ -13,26 +18,19 @@ class DiagnosesController {
     const {
       idPatient,
       idDoctor,
-      idPatientCondition,
       description,
       diagnosisUrl,
       idExams, // Array
     } = req.body;
     const [patient] = await knex('patients').where('id', idPatient);
     const [doctor] = await knex('doctors').where('id', idDoctor);
-    const [patientCondition] = await knex('patients_conditions').where(
-      'id',
-      idPatientCondition
-    );
-    if (!patient || !doctor || !patientCondition) {
+    if (!patient || !doctor) {
       return res.status(404).json({
-        error: 'Provide an existing patient, doctor and patientCondition',
+        error: 'Provide an existing patient and doctor',
       });
     }
 
     const exams = await knex('exams').whereIn('id', idExams);
-
-    // TODO conferir se exames são do paciente
 
     if (exams.length !== idExams.length) {
       return res
@@ -44,9 +42,8 @@ class DiagnosesController {
       {
         idPatient,
         idDoctor,
-        idPatientCondition,
         description,
-        diagnosisUrl
+        diagnosisUrl,
       },
       '*'
     );
@@ -58,7 +55,7 @@ class DiagnosesController {
       });
     }
 
-    return res.status(201).json(createdDiagnosis);
+    return res.status(201).json({ ...createdDiagnosis, idExams });
   }
 
   async updateDiagnoses(req, res) {
@@ -83,7 +80,9 @@ class DiagnosesController {
 
     // DIAGNOSIS_EXAMS TABLE
     if (idExams) {
-      const currentDiagnosis = await knex('diagnoses_exams').where({ idDiagnosis });
+      const currentDiagnosis = await knex('diagnoses_exams').where({
+        idDiagnosis,
+      });
 
       const currentExams = currentDiagnosis.map(
         (diagnoses) => diagnoses.idExam
@@ -112,9 +111,7 @@ class DiagnosesController {
       return res.status(400).json({ error: 'Exam and diagnosis not related' });
     }
 
-    await knex('diagnoses_exams')
-      .where({ idDiagnosis, idExam })
-      .del();
+    await knex('diagnoses_exams').where({ idDiagnosis, idExam }).del();
 
     return res.json(existingExam);
   }
