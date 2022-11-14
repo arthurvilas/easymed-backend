@@ -28,7 +28,6 @@ class MedicationsController {
       dosage,
       type,
       frequency,
-      isActive,
       startedAt,
       stoppedAt,
     } = req.body;
@@ -46,7 +45,6 @@ class MedicationsController {
         dosage,
         type,
         frequency,
-        isActive,
         startedAt,
         stoppedAt,
       },
@@ -60,18 +58,26 @@ class MedicationsController {
 
   async updateMedication(req, res) {
     const {
-      id: idRelation,
+      idRelation,
       dosage,
-      isActive,
+      type,
+      frequency,
       startedAt,
       stoppedAt,
     } = req.body;
+
     const [existingMedication] = await knex('patients_medications').where({
       id: idRelation
     });
+
     if (!existingMedication) {
       return res.status(400).json({ error: 'Medication not registered' });
     }
+
+    if (existingMedication.stoppedAt) {
+      return res.status(400).json({error: "Medication already inactive"})
+    }
+
     const [updatedMedication] = await knex('patients_medications')
       .where({
         id: idRelation
@@ -79,9 +85,10 @@ class MedicationsController {
       .update(
         {
           dosage,
-          isActive,
           startedAt,
           stoppedAt,
+          type,
+          frequency,
         },
         '*'
       );
@@ -90,7 +97,7 @@ class MedicationsController {
   }
 
   async deleteMedication(req, res) {
-    const { id: idRelation } = req.body;
+    const { idRelation } = req.body;
     const [existingMedication] = await knex('patients_medications').where({
       id: idRelation
     });

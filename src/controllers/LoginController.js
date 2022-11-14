@@ -38,7 +38,7 @@ const login = async (req, res) => {
     }
   }
 
-  return res.status(400).json('Not found');
+  return res.status(400).json({ error: 'Invalid username or password' });
 };
 
 module.exports = login;

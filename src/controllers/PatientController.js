@@ -22,10 +22,9 @@ class PatientController {
     );
 
     const token = jwt.sign(
-      { id: patient.id, role: 'patient' },
+      { id: patient.id, role: 'patient', email: patient.email, pictureUrl: patient.pictureUrl },
       process.env.JWT_SECRET
     );
-
 
     delete patient.password;
     return res.status(201).json({ ...patient, token });

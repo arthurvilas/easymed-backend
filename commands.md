@@ -8,3 +8,6 @@ Rollback Migration:
 * npx knex migrate:down
 * npx knex migrate:down nameOfMigration.js
 
+RollBack all Migrations:
+* npx knex migrate:rollback --all
+

@@ -15,7 +15,6 @@ exports.up = function (knex) {
     table.decimal('dosage');
     table.enu('type', ['mg', 'ml']);
     table.string('frequency', 200);
-    table.boolean('isActive');
     table.date('startedAt');
     table.date('stoppedAt');
   });

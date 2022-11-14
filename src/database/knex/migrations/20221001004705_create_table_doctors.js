@@ -10,6 +10,10 @@ exports.up = function (knex) {
     table.string('password', 255).notNullable();
     table.string('crm', 20).notNullable();
     table.string('pictureUrl', 1000);
+    table.string('specialty', 200);
+    table.integer('age');
+    table.string('clinics', 5000);
+    table.string('city', 1000);
     table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.timestamp('updatedAt').defaultTo(knex.fn.now());
   });

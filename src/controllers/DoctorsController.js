@@ -1,7 +1,6 @@
 const { hash } = require('bcryptjs');
 const knex = require('../database/knex');
 const jwt = require('jsonwebtoken');
-const attachJWTToRes = require('../utils/attachJWT');
 
 class DoctorsController {
   async createDoctor(req, res) {
@@ -25,10 +24,9 @@ class DoctorsController {
       { id: doctor.id, role: 'doctor' },
       process.env.JWT_SECRET
     );
-    attachJWTToRes(res, token);
 
     delete doctor.password;
-    return res.status(201).json(doctor);
+    return res.status(201).json({ ...doctor, token });
   }
 
   async updateDoctor(req, res) {

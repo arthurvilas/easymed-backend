@@ -13,7 +13,7 @@ exports.up = function (knex) {
     table.double('height');
     table.double('weight');
     table.enu('gender', ['male', 'female', 'other']);
-    table.string('pictureUrl', 1000);
+    table.string('pictureUrl', 2000);
     table.date('birthDate');
     table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.timestamp('updatedAt').defaultTo(knex.fn.now());
