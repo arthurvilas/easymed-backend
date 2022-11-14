@@ -11,10 +11,9 @@ class ExamsController {
   async createExam(req, res) {
     const { idPatient, examType, location, summary, date } = req.body;
     const [patient] = await knex('patients').where('id', idPatient);
-    const [doctor] = await knex('doctors').where('id');
-    if (!patient || !doctor) {
+    if (!patient) {
       return res.status(404).json({
-        error: 'Provide an existing patient, doctor and patientCondition',
+        error: 'Provide an existing patient',
       });
     }
 
