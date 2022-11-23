@@ -3,6 +3,11 @@ const { hash, compare } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 class PatientController {
+  async listPatients(req, res) {
+    const patients = await knex.select().from('patients');
+    return res.json(patients);
+  }
+
   async createPatient(req, res) {
     const { name, cpf, phone, email, password } = req.body;
     const [unavailableEmail] = await knex('patients').where('email', email);
@@ -27,7 +32,7 @@ class PatientController {
     );
 
     delete patient.password;
-    return res.status(201).json({ ...patient, token });
+    return res.status(201).json({ ...patient, token, role: 'patient' });
   }
 
   async updatePatient(req, res) {

@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/v1', router);
+// app.use('/api/v2', );
 
 app.use(express.static(__dirname + '/public'));
 

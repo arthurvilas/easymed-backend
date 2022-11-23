@@ -2,6 +2,7 @@ const knex = require('../database/knex');
 const { compare } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+// .../login
 const login = async (req, res) => {
   const { email, password } = req.body;
 
