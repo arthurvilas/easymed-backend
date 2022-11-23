@@ -21,12 +21,12 @@ class DoctorsController {
     );
 
     const token = jwt.sign(
-      { id: doctor.id, role: 'doctor' },
+      { id: doctor.id, role: 'doctor', email: doctor.email, pictureUrl: doctor.pictureUrl },
       process.env.JWT_SECRET
     );
 
     delete doctor.password;
-    return res.status(201).json({ ...doctor, token });
+    return res.status(201).json({ ...doctor, token, role: 'doctor' });
   }
 
   async updateDoctor(req, res) {

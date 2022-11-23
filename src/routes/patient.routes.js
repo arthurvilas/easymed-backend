@@ -17,7 +17,7 @@ patientRouter.use('/allergies', allergiesRouter);
 patientRouter.use('/diagnoses', diagnosesRouter);
 patientRouter.use('/exams', examsRouter);
 
-
+patientRouter.get('/list', patientController.listPatients);
 patientRouter.get('/:idPatient', patientController.getPatient);
 patientRouter.patch('/:idPatient', patientController.updatePatient);
 patientRouter.post('/signup', patientController.createPatient);
