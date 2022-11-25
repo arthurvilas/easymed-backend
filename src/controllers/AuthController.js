@@ -33,7 +33,7 @@ const auth = async (req, res) => {
       const token = jwt.sign({ id: entity.id, role }, process.env.JWT_SECRET, {
         algorithm: 'HS256',
       });
-      return res.json({ ...entity, token });
+      return res.json({ ...entity, token, role });
     }
   }
 
