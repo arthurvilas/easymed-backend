@@ -55,13 +55,7 @@ class ConditionsController {
   }
 
   async updateCondition(req, res) {
-    const {
-      idRelation,
-      isInFamily,
-      symptoms,
-      startedAt,
-      stoppedAt,
-    } = req.body;
+    const { idRelation, isInFamily, symptoms, startedAt, stoppedAt } = req.body;
     const [existingCondition] = await knex('patients_conditions').where({
       id: idRelation,
     });

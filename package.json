@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx knex migrate:latest && node src/index.js",
+    "start": "npx knex --env production migrate:latest && node src/index.js",
     "test": "nodemon src/index.js",
     "migrate": "knex migrate:latest --knexfile knexfile.js"
   },

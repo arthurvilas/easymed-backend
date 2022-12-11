@@ -27,7 +27,12 @@ class PatientController {
     );
 
     const token = jwt.sign(
-      { id: patient.id, role: 'patient', email: patient.email, pictureUrl: patient.pictureUrl },
+      {
+        id: patient.id,
+        role: 'patient',
+        email: patient.email,
+        pictureUrl: patient.pictureUrl,
+      },
       process.env.JWT_SECRET
     );
 
